@@ -2,7 +2,7 @@
 layout: post 
 title: 'Bash Shell常用快捷键'
 date: 2018-09-19
-categories: 技术
+categories: Linux
 tags: 帮助
 ---
 

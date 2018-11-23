@@ -3,7 +3,7 @@
 layout: post 
 title: 'Spring Cloud资料'
 date: 2018-08-26 
-categories: 技术 
+categories: Spring 
 tags: Java Spring
 
 ---

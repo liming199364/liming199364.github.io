@@ -3,7 +3,7 @@
 layout: post 
 title: 'Spring Boot 普通类使用Spring管理对象'
 date: 2018-08-30 
-categories: 技术 
+categories: Spring 
 tags: Java 
 
 ---
