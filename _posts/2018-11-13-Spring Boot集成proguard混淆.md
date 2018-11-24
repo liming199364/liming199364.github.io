@@ -2,7 +2,7 @@
 layout: post 
 title: 'Spring Boot集成proguard混淆'
 date: 2018-11-13
-categories: 技术
+categories: Spring
 tags: Java
 ---
 
