@@ -1,6 +1,6 @@
 ---
 layout: post 
-title: '消息中间件'
+title: 'Spring Boot日志配置模板'
 date: 2019-01-03
 categories: Spring
 tags: Spring
