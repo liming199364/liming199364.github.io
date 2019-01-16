@@ -31,6 +31,7 @@ tags: Spring
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.path}/root_log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>5</maxHistory>
         </rollingPolicy>
         <encoder>
             <!--<pattern>%-30(%d{YYYY-MM-dd HH:mm:ss.SSS} [%contextName]) [%-5level][%logger{0}][%M][%L] : %msg%n</pattern>-->
