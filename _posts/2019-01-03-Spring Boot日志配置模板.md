@@ -46,3 +46,6 @@ tags: Spring
 
 </configuration>
 ```
+
+[logback配置模板](https://juejin.im/post/5c62858f51882562e8762d29?utm_source=gold_browser_extension#heading-24)
+
