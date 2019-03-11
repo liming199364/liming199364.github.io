@@ -9,42 +9,90 @@ tags: Spring
 留住备用
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+<configuration debug="false">
+    <!-- 从spring中获取配置，如获取不到会使用默认值 -->
+    <springProperty scope="context" name="LOG_HOME" source="logging.path"/>
+    <springProperty scope="context" name="LOG_LEVEL" source="logging.output.level"/>
+    <springProperty scope="context" name="LOG_MAX_SIZE" source="logging.file.max-size"/>
+    <springProperty scope="context" name="LOG_TOTAL_SIZE_CAP" source="logging.file.total-size-cap"/>
+    <springProperty scope="context" name="LOG_MAX_HISTORY" source="logging.file.max-history"/>
+    <!-- 输出样式 -->
+    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%logger{10}]-[%p] %m%n"/>
 
-    <contextName>res-config-operation</contextName>
-
-    <property name="appid" value="15" scope="context"/>
-    <property name="local" value="0" scope="context"/>
-    <property name="cmdId" value="0" scope="context"/>
-    <property name="subCmdId" value="0" scope="context"/>
-
-    <property name="log.path" value="/data/data" />
-    <!--输出到控制台-->
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <!--<pattern>%-30(%d{YYYY-MM-dd HH:mm:ss.SSS} [%contextName]) [%-5level][%logger{0}][%M][%L] : %msg%n</pattern>-->
-            <pattern>%d{HH:mm:ss.SSS} [%level]%M.java\(%L\)|%logger{0}|%msg%n</pattern>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%blue(%d{yyyy-MM-dd HH:mm:ss.SSS}) [%cyan(%t)] [%yellow(%logger{10})]-[%highlight(%p)] %m%n</pattern>
         </encoder>
     </appender>
 
-    <!--输出到文件-->
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/root_log.%d{yyyy-MM-dd}</fileNamePattern>
-            <maxHistory>5</maxHistory>
+    <appender name="Main-Log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME:-logs}/main.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME:-logs}/main-%d{yyyy-MM-dd}_%i.log</FileNamePattern>
+            <MaxHistory>${LOG_MAX_HISTORY:-30}</MaxHistory>
+            <MaxFileSize>${LOG_MAX_SIZE:-200MB}</MaxFileSize>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP:-10GB}</totalSizeCap>
         </rollingPolicy>
-        <encoder>
-            <!--<pattern>%-30(%d{YYYY-MM-dd HH:mm:ss.SSS} [%contextName]) [%-5level][%logger{0}][%M][%L] : %msg%n</pattern>-->
-            <pattern>%d{HH:mm:ss.SSS} [%level]%M.java\(%L\)|%logger{0}|%msg%n</pattern>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
         </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="console" />
-        <appender-ref ref="file" />
+
+    <appender name="Error-Log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME:-logs}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME:-logs}/error-%d{yyyy-MM-dd}_%i.log</FileNamePattern>
+            <MaxHistory>${LOG_MAX_HISTORY:-30}</MaxHistory>
+            <MaxFileSize>${LOG_MAX_SIZE:-200MB}</MaxFileSize>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP:-10GB}</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="Warn-Log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME:-logs}/warn.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME:-logs}/warn-%d{yyyy-MM-dd}_%i.log</FileNamePattern>
+            <MaxHistory>${LOG_MAX_HISTORY:-30}</MaxHistory>
+            <MaxFileSize>${LOG_MAX_SIZE:-200MB}</MaxFileSize>
+            <totalSizeCap>${LOG_TOTAL_SIZE_CAP:-10GB}</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${pattern}</pattern>
+        </encoder>
+        <!-- log filter -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 关闭类中某个级别的输出 OFF全部关闭 , INFO,DEBUG ...
+    <logger name="x.x.Constants">
+        <level value="OFF"/>
+    </logger>
+    -->
+
+    <!-- log output level -->
+    <root level="${LOG_LEVEL:-INFO}">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="Main-Log"/>
+        <!--<appender-ref ref="Warn-Log"/>-->
+        <!--<appender-ref ref="Error-Log"/>-->
     </root>
 
 </configuration>
+
 ```
 
 [logback配置模板](https://juejin.im/post/5c62858f51882562e8762d29?utm_source=gold_browser_extension#heading-24)
