@@ -44,4 +44,10 @@ tf.keras.models.save_model(model, '/path/',save_format='tf')
 model = tf.keras.models.load_model("/Users/liming/Desktop/data/predict")
 ```
 
+```
+tf-nightly-2.0-preview 2.0.0.dev20191002
+https://pypi.org/project/tf-nightly-2.0-preview/
+注意tf版本号，最新的才可以
+```
+
 亲测可用，用默认的model.save就会出现这个问题，并且导出的问题没有assets这些文件。
